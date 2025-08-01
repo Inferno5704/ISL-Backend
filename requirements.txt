@@ -2,7 +2,7 @@ flask
 flask-cors
 nltk
 gunicorn
-base64
+pillow
 numpy
 cv2
 tflite_runtime
