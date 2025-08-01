@@ -10,6 +10,7 @@ nltk.data.path.append(nltk_data_path)
 # ✅ Optional: download only if missing (for local dev)
 required_resources = [
     ('punkt', 'tokenizers/punkt'),
+    ('punkt_tab','tokenizers/punkt'),
     ('stopwords', 'corpora/stopwords'),
     ('wordnet', 'corpora/wordnet'),
     ('averaged_perceptron_tagger', 'taggers/averaged_perceptron_tagger')
