@@ -3,7 +3,9 @@ import nltk
 
 # 🔐 Force NLTK to use local nltk_data folder (pre-downloaded)
 nltk_data_path = os.path.join(os.path.dirname(__file__), "nltk_data")
+nltk.data.path.clear()  # ✨ IMPORTANT: stop NLTK from searching system paths
 nltk.data.path.append(nltk_data_path)
+
 
 # ✅ Optional: download only if missing (for local dev)
 required_resources = [
