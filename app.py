@@ -1,26 +1,12 @@
-import os
+
 import nltk
 
-# 🔐 Force NLTK to use local nltk_data folder (pre-downloaded)
-nltk_data_path = os.path.join(os.path.dirname(__file__), "nltk_data")
-nltk.data.path.clear()  # ✨ IMPORTANT: stop NLTK from searching system paths
-nltk.data.path.append(nltk_data_path)
-
-
-# ✅ Optional: download only if missing (for local dev)
-required_resources = [
-    ('punkt', 'tokenizers/punkt'),
-    ('punkt_tab','tokenizers/punkt'),
-    ('stopwords', 'corpora/stopwords'),
-    ('wordnet', 'corpora/wordnet'),
-    ('averaged_perceptron_tagger', 'taggers/averaged_perceptron_tagger')
-]
-
-for resource_name, path in required_resources:
-    try:
-        nltk.data.find(path)
-    except LookupError:
-        nltk.download(resource_name, download_dir=nltk_data_path)
+# Runtime download of required NLTK data
+nltk.download('punkt_tab')
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
 
 
 from flask import Flask, request, jsonify
