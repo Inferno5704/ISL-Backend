@@ -78,12 +78,12 @@ import base64
 import numpy as np
 import cv2
 from flask import Flask, request, jsonify
-import tflite_runtime.interpreter as tflite
+import tensorflow as tf
 
 app = Flask(__name__)
 
 # Load model once
-interpreter = tflite.Interpreter(model_path="sign_language_model.tflite")
+interpreter = tf.lite.Interpreter(model_path="sign_language_model.tflite")
 interpreter.allocate_tensors()
 
 input_details = interpreter.get_input_details()
