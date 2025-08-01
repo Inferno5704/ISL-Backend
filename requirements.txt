@@ -4,5 +4,5 @@ nltk
 gunicorn
 pillow
 numpy
-cv2
-tflite_runtime
+opencv-python
+tensorflow
