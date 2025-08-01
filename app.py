@@ -126,7 +126,7 @@ def predict():
         return jsonify({"output": predicted_char, "confidence": float(confidence)})
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e)})
 
 @app.route("/")
 def index():
