@@ -1,4 +1,9 @@
 import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from nltk.tokenize import word_tokenize
