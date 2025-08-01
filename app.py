@@ -74,6 +74,64 @@ def convert_to_isl():
         return jsonify({
             'error': str(e)
         }), 500
+import base64
+import numpy as np
+import cv2
+from flask import Flask, request, jsonify
+import tflite_runtime.interpreter as tflite
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+app = Flask(__name__)
+
+# Load model once
+interpreter = tflite.Interpreter(model_path="sign_language_model.tflite")
+interpreter.allocate_tensors()
+
+input_details = interpreter.get_input_details()
+output_details = interpreter.get_output_details()
+
+# Characters your model predicts
+CHARACTERS = [chr(i) for i in range(65, 91)]  # A-Z
+
+@app.route("/predict", methods=["POST"])
+def predict():
+    try:
+        data = request.get_json()
+        image_b64 = data.get("image_base64")
+        if not image_b64:
+            return jsonify({"error": "No image data provided"}), 400
+
+        # Decode image
+        img_bytes = base64.b64decode(image_b64)
+        img_array = np.frombuffer(img_bytes, np.uint8)
+        img = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
+
+        if img is None:
+            return jsonify({"error": "Failed to decode image"}), 400
+
+        # Resize & normalize
+        input_img = cv2.resize(img, (64, 64))  # adjust to model input
+        input_img = input_img.astype(np.float32) / 255.0
+        input_img = np.expand_dims(input_img, axis=0)
+
+        # Run inference
+        interpreter.set_tensor(input_details[0]["index"], input_img)
+        interpreter.invoke()
+        output = interpreter.get_tensor(output_details[0]["index"])[0]
+
+        # Get top prediction
+        top_idx = np.argmax(output)
+        confidence = output[top_idx]
+        predicted_char = CHARACTERS[top_idx] if confidence >= 0.5 else "?"
+
+        return jsonify({"output": predicted_char, "confidence": float(confidence)})
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/")
+def index():
+    return "TFLite Sign Language Inference API is live."
+
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=5000)
+
