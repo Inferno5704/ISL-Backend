@@ -6,7 +6,10 @@ nltk.download('stopwords')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
 
-
+import base64
+import numpy as np
+import cv2
+import tensorflow as tf
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from nltk.tokenize import word_tokenize
@@ -74,13 +77,8 @@ def convert_to_isl():
         return jsonify({
             'error': str(e)
         }), 500
-import base64
-import numpy as np
-import cv2
-from flask import Flask, request, jsonify
-import tensorflow as tf
 
-app = Flask(__name__)
+
 
 # Load model once
 interpreter = tf.lite.Interpreter(model_path="sign_language_model.tflite")
