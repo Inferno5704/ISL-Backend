@@ -55,7 +55,7 @@ def english_to_isl(text):
     isl_sentence = subject + object_ + verb + others
     return " ".join(isl_sentence)
 
-@app.route('/convert_to_isl', methods=['POST'])
+@app.route("/convert_to_isl", methods=['POST'])
 def convert_to_isl():
     data = request.json
     text = data.get('text', '')
